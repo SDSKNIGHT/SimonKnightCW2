@@ -8,6 +8,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        LngLat doug = new LngLat(55.55,55.55);
+        System.out.println();
     }
 }
