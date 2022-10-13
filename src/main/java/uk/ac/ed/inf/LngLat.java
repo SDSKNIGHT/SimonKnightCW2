@@ -30,7 +30,7 @@ public record LngLat(double lng, double lat){
             return false;
         }
     }
-    public LngLat nextPosition ( enum angle){
+    public LngLat nextPosition (Enums.CardinalDirection angle){
 
 
 
@@ -38,9 +38,9 @@ public record LngLat(double lng, double lat){
             return this;
             //DO A CONVERSION OF THE ENUM DIRECTIONS INTO VALUES
         } else {
-            double rads = //rads calculation
-            double newLng = this.lng + Math.cos (rads) * 0.00015;
-            double newLat = this.lat + Math.sin (rads) * 0.00015;
+
+            double newLng = this.lng + Math.cos (angle.val) * 0.00015;
+            double newLat = this.lat + Math.sin (angle.val) * 0.00015;
 
             LngLat newPos = new LngLat (newLng, newLat);
             return newPos;
