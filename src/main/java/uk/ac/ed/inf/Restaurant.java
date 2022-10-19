@@ -25,8 +25,12 @@ public class Restaurant {
     static Restaurant[] getRestaurantsFromRestServer(URL serverBaseAddress){
         try{
             String baseAddress = serverBaseAddress.toString();
+            if ( !baseAddress.endsWith ( "/" ) ) {
+                baseAddress += "/" ;
+            }
             URL restaurantsURL = new URL (baseAddress+ "restaurants");
             Restaurant[] restaurantArray = new ObjectMapper().readValue( restaurantsURL, Restaurant[].class);
+            return restaurantArray;
         } catch(MalformedURLException exception){
             exception.printStackTrace();
         } catch (IOException exception){
