@@ -2,6 +2,12 @@ package uk.ac.ed.inf;
 
 public class Enums {
     public enum CardinalDirection{
+        /**
+         * enums to represent non-continuus spectrum
+         *
+         *
+         * directions with east as 0 running counterclockwise.
+         */
         N(90),
         NNE(67.5),
         NE(45),
