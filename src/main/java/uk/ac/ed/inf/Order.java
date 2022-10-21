@@ -28,26 +28,30 @@ public class Order {
      * @param order
      * @return
      */
-    public Restaurant returnRestaurant(Restaurant[] restaurants, String... order){
+    public static Restaurant returnRestaurant(Restaurant[] restaurants, String... order){
         Restaurant actual =null;
         for (Restaurant r:restaurants){
             int items =0;
             for(int i=0; i<r.getMenu().length;i++){
+
+
                 for(int j=0; j<order.length;j++){
-                    if(r.getMenu()[i].menuItem==order[j]){
+
+                    if((r.getMenu()[i].menuItem.equals(order[j]))){
                         items=items+1;
 
+                        if(items==order.length){
+                            actual = r;
+                            return actual;
+                        }
                     }
-                    if(items==order.length){
-                        actual = r;
-                        return actual;
-                    }
+
                 }
             }
         }
-        return null;
+        return actual;
     }
-    public int getDeliveryCost(Restaurant[] restaurants, String... order) throws Exception {
+    public static int getDeliveryCost(Restaurant[] restaurants, String... order) throws Exception {
         Restaurant actual = returnRestaurant(restaurants, order);
         if(actual == null){
             throw new Exception("No restaurant delivers the given selection");
@@ -55,7 +59,7 @@ public class Order {
         int priceInP = 100;
         for(int i=0; i<actual.getMenu().length;i++) {
             for (int j = 0; j < order.length; j++) {
-                if (actual.getMenu()[i].menuItem == order[j]) {
+                if (actual.getMenu()[i].menuItem.equals(order[j])) {
                     priceInP = priceInP + actual.getMenu()[i].menuItemPrice;
                 }
             }
