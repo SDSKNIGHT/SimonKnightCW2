@@ -19,7 +19,7 @@ public record LngLat(double lng, double lat){
                 if(slope ==0){
                     return true;
 
-                     // indcates whether the point is on a boundary
+                     // indcates whether the point is on a boundary, if so it is in fact intersecting.
                 }
                 if((slope <0)!=(centralArea[j].lat<centralArea[i].lat)){
                     result = !result;

@@ -33,6 +33,12 @@ public class Singleton {
     public static CentralAreaPoint[] getCentralAreaPoints(){
         return centralAreaPoints;
     }
+
+
+    /**
+     * get instance method ensures only one instance of Singleton exists at any time.
+     * @return
+     */
     public static Singleton getInstance(){
         if(instance==null){
             Singleton instance = new Singleton();

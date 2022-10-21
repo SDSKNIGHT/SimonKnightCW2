@@ -18,7 +18,7 @@ public class Restaurant {
     @JsonProperty("menu")
     public Menu[] menu;
 
-    public Menu[] GetMenu(){
+    public Menu[] getMenu(){
         return menu;
 
     }
