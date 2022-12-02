@@ -37,7 +37,7 @@ public class Order {
 
                 for(int j=0; j<order.length;j++){
 
-                    if((r.getMenu()[i].menuItem.equals(order[j]))){  //absolute pain here, forgot that == in java was not equals for strings in jav
+                    if((r.getMenu()[i].menuItem.equals(order[j]))){
                         items=items+1;
 
                         if(items==order.length){
