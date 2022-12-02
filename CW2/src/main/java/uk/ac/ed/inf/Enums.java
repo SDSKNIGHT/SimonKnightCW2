@@ -1,6 +1,6 @@
 package uk.ac.ed.inf;
 
-public class Enums {
+public class CardinalDirection {
     public enum CardinalDirection{
         /**
          * enums to represent non-continuus directions
