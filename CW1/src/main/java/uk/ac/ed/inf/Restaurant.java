@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
