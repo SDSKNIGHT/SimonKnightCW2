@@ -1,7 +1,5 @@
 package uk.ac.ed.inf;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
