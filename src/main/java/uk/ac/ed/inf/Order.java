@@ -1,7 +1,13 @@
 package uk.ac.ed.inf;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 
 public class Order {
@@ -66,7 +72,24 @@ public class Order {
         }
         return priceInP;
     }
+    static Order[] getOrdersForDate(String baseAddress, String date){
+        try{
 
+            URL orderURL = new URL (baseAddress+ "order/"+date);
+            Order[] orderArray = new ObjectMapper().readValue( orderURL, Order[].class);
+            return orderArray;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (StreamReadException e) {
+            e.printStackTrace();
+        } catch (DatabindException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
     /**
      * enums I added because they were in the specification, must be a CW2 thing.
      */

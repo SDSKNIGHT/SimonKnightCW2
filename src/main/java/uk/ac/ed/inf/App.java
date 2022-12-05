@@ -3,23 +3,30 @@ package uk.ac.ed.inf;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Hello world!
- *
- */
 public class App
 {
     public static void main( String[] args ) throws Exception {
-        Restaurant steve = new Restaurant();
-        LngLat doug = new LngLat(-3.518500,55.943);
-        System.out.println( doug.inCentralArea());
-        URL dan = new URL ("https://ilp-rest.azurewebsites.net/");
+        String date = args[0];
+        String url = args[1];
+        String seed = args[2];
+        RESTClient client =new RESTClient(url);
+
+        MapModel map = new MapModel(client, date);
+        Drone drone =new Drone(map,map.getStartPos());
+        //move drone
 
 
-        System.out.println(Restaurant.getRestaurantsFromRestServer(dan)[0].name);
-        int j = Order.getDeliveryCost(Restaurant.getRestaurantsFromRestServer( dan),"Margarita");
-        System.out.println(j);
-        //System.out.println(Restaurant.getRestaurantsFromRestServer( dan));
+        /** making the fucking algo, also outputing delivries and also flightpath
+         *
+         */
+
+        /**
+         * this next section would make the Geojson file
+         */
+
+
+
+
 
     }
 

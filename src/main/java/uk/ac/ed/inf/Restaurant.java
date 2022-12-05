@@ -19,20 +19,24 @@ public class Restaurant {
     public double lat;
     @JsonProperty("menu")
     public Menu[] menu;
+    public double distance = -1;
 
     public Menu[] getMenu(){
         return menu;
 
     }
+    public getDistance{
+        if (distance == -1){
+
+
+        }
+    }
 
 
 
-    static Restaurant[] getRestaurantsFromRestServer(URL serverBaseAddress){
+    static Restaurant[] getRestaurantsFromRestServer(String baseAddress){
         try{
-            String baseAddress = serverBaseAddress.toString();
-            if ( !baseAddress.endsWith ( "/" ) ) {
-                baseAddress = baseAddress+ "/" ;
-            }
+
             URL restaurantsURL = new URL (baseAddress+ "restaurants");
             Restaurant[] restaurantArray = new ObjectMapper().readValue( restaurantsURL, Restaurant[].class);
 

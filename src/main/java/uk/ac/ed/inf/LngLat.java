@@ -2,6 +2,8 @@ package uk.ac.ed.inf;
 
 public record LngLat(double lng, double lat){
 
+
+
     public Boolean inCentralArea(){
         //even odd rule implementation, if any line drawn from a point in any direction intersects an odd number of edges then
         Singleton p=Singleton.getInstance();
