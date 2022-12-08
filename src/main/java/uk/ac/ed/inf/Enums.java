@@ -23,9 +23,10 @@ public class Enums {
         W(180),
         WNW(157.5),
         NW(135),
-        NNW(112.5);
+        NNW(112.5),
+        HOVER(null);
         public final double val;
-        private CardinalDirection(double val ){
+        private CardinalDirection(Double val ){
             this.val=val;
         }
     }

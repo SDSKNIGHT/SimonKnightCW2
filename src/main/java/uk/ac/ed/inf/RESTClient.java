@@ -32,10 +32,12 @@ public class RESTClient {
             e.printStackTrace();
         }
     }
-    public getCentralArea(){
+    public CentralArea getCentralArea(){
+        CentralArea Result = new CentralArea(urlString );
+        return Result;
 
     }
-    public getNoFlyZones(){
+    public NoFlyObject[] getNoFlyZones(){
         NoFlyObject[] Result = NoFlyObject.getNoFlyObjects(urlString);
         return Result;
 
@@ -47,9 +49,6 @@ public class RESTClient {
     }
     public Order[] getOrders(String date){
         Order[] Result = Order.getOrdersForDate(urlString,date);
-
-
-
         return Result;
     }
 

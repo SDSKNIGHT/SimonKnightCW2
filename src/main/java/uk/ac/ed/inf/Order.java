@@ -9,10 +9,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.Map;
 
 public class Order {
     @JsonProperty("orderNo")
-    public int orderNo;
+    public String  orderNo;
     @JsonProperty("orderDate")
     public Date date;
     @JsonProperty("customer")
@@ -27,6 +28,9 @@ public class Order {
     public int priceInPence;
     @JsonProperty("orderItems")
     public String[] order;
+    public Restaurant restaurantVal=null;
+    public Double distance;
+    public OrderOutcome orderOutcome;
 
     /**
      *  helper function for the getDeliveryCost that identifies whether the order is feasible from one restaurant;
@@ -34,39 +38,56 @@ public class Order {
      * @param order
      * @return
      */
-    public static Restaurant returnRestaurant(Restaurant[] restaurants, String... order){
-        Restaurant actual =null;
-        for (Restaurant r:restaurants){
-            int items =0;
-            for(int i=0; i<r.getMenu().length;i++){
+    public Restaurant returnRestaurant(Restaurant[] restaurants, String... order){
+        if (restaurantVal == null) {
+            Restaurant actual = null;
+            for (Restaurant r : restaurants) {
+                int items = 0;
+                for (int i = 0; i < r.getMenu().length; i++) {
 
 
-                for(int j=0; j<order.length;j++){
+                    for (int j = 0; j < order.length; j++) {
 
-                    if((r.getMenu()[i].menuItem.equals(order[j]))){  //absolute pain here, forgot that == in java was not equals for strings in jav
-                        items=items+1;
+                        if ((r.getMenu()[i].menuItem.equals(order[j]))) {  //absolute pain here, forgot that == in java was not equals for strings in jav
+                            items = items + 1;
 
-                        if(items==order.length){
-                            actual = r;
-                            return actual;
+                            if (items == order.length) {
+                                actual = r;
+
+                                restaurantVal = actual;
+                                return actual;
+                            }
                         }
-                    }
 
+                    }
                 }
             }
+            this.orderOutcome = OrderOutcome.InvalidPizzaNotDefined;
+            return actual;
         }
-        return actual;
+        return restaurantVal;
     }
-    public static int getDeliveryCost(Restaurant[] restaurants, String... order) throws Exception {
-        Restaurant actual = returnRestaurant(restaurants, order);
-        if(actual == null){
+    public String getOrderNo(){
+        return this.orderNo;
+    }
+
+    public String getOrderOutcome() {
+        return orderOutcome.toString();
+    }
+
+    public int getDeliveryCost(Restaurant[] restaurants, String... order) throws Exception {
+        if (this.restaurantVal == null) {
+            Restaurant actual = returnRestaurant(restaurants, order);
+        }
+
+        if(this.restaurantVal==null){
             throw new Exception("No restaurant delivers the given selection");
         }
         int priceInP = 100;
-        for(int i=0; i<actual.getMenu().length;i++) {
+        for(int i=0; i<this.restaurantVal.getMenu().length;i++) {
             for (int j = 0; j < order.length; j++) {
-                if (actual.getMenu()[i].menuItem.equals(order[j])) {
-                    priceInP = priceInP + actual.getMenu()[i].menuItemPrice;
+                if (this.restaurantVal.getMenu()[i].menuItem.equals(order[j])) {
+                    priceInP = priceInP + this.restaurantVal.getMenu()[i].menuItemPrice;
                 }
             }
         }
@@ -90,17 +111,32 @@ public class Order {
         return null;
 
     }
+    public double orderDistance(Restaurant[] restaurants){
+        if (this.restaurantVal == null){
+            if (this.restaurantVal == null) {
+                Restaurant actual = returnRestaurant(restaurants, order);
+            }
+        }
+        if (this.restaurantVal!= null) {
+
+            if (this.distance == null) {
+                distance = restaurantVal.getDistance();
+
+            }
+        }
+        return distance;
+    }
     /**
-     * enums I added because they were in the specification, must be a CW2 thing.
+     * enums for delivery status.
      */
     public enum OrderOutcome {
-        Delivered,
-        ValidButNotDelivered ,
-        InvalidCardNumber ,
-        InvalidExpiryDate ,
-        InvalidCvv ,
+        Delivered,//success
+        ValidButNotDelivered ,//success, no battery
+        InvalidCardNumber , //card format wrong
+        InvalidExpiryDate ,//expiry date format wrong
+        InvalidCvv ,//cvv formatted wrong
         InvalidTotal ,
-        InvalidPizzaNotDefined ,
+        InvalidPizzaNotDefined ,// non real pizza included
         InvalidPizzaCount ,
         InvalidPizzaCombinationMultipleSuppliers ,
         Invalid

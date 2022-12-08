@@ -25,11 +25,11 @@ public class Restaurant {
         return menu;
 
     }
-    public getDistance{
+    public double getDistance(){
         if (distance == -1){
-
-
+            this.distance = Math.hypot(MapModel.APPLETON_TOWER_LONGITUDE-lng, MapModel.APPLETON_TOWER_LATITUDE-lat);
         }
+        return distance;
     }
 
 

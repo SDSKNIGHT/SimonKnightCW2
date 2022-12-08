@@ -9,7 +9,7 @@ public class FlightPath {
     double toLatitude;
     int ticksSinceStartOfCalculation;
 
-    public FlightPath(String orderNo, double fromLongitude, double fromLatitude, double angle, double toLongitude, double toLatitude, int ticksSinceStartOfCalculation) {
+    public FlightPath(String orderNo, double fromLongitude, double fromLatitude, Double angle, double toLongitude, double toLatitude, int ticksSinceStartOfCalculation) {
         this.orderNo = orderNo;
         this.fromLongitude = fromLongitude;
         this.fromLatitude = fromLatitude;

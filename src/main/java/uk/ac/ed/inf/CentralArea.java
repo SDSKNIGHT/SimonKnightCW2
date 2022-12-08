@@ -1,23 +1,22 @@
 package uk.ac.ed.inf;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
-public class Singleton {
+public class CentralArea {
 
-    private static Singleton instance = null;
+    private static CentralArea instance = null;
     private static CentralAreaPoint[] centralAreaPoints;
-    private static String url = "https://ilp-rest.azurewebsites.net/";
 
-    public Singleton(){
+
+    public CentralArea(String url){
         try{
-            URL urlFinal =new URL(url+"centralArea");
+            URL urlFinal =new URL( url+"centralArea");
             centralAreaPoints = new ObjectMapper().readValue(urlFinal, CentralAreaPoint[].class);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -35,18 +34,8 @@ public class Singleton {
     }
 
 
-    /**
-     * get instance method ensures only one instance of Singleton exists at any time.
-     * @return
-     */
-    public static Singleton getInstance(){
-        if(instance==null){
-            Singleton instance = new Singleton();
-        }
+    public static CentralArea getInstance() {
+
         return instance;
     }
-
-
-
-
 }

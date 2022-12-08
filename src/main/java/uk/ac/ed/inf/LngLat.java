@@ -6,7 +6,7 @@ public record LngLat(double lng, double lat){
 
     public Boolean inCentralArea(){
         //even odd rule implementation, if any line drawn from a point in any direction intersects an odd number of edges then
-        Singleton p=Singleton.getInstance();
+        CentralArea p= CentralArea.getInstance();
         CentralAreaPoint[] centralArea=p.getCentralAreaPoints();
         boolean result = false;
         for (int i=0,j= centralArea.length-1;i< centralArea.length;i++)
