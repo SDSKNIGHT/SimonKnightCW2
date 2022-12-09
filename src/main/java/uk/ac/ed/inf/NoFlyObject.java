@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class NoFlyObject {
     @JsonProperty ("name")
@@ -32,6 +33,14 @@ public class NoFlyObject {
         }
 
         return null;
+    }
+    public ArrayList<LngLat> getCoordinates(){
+        ArrayList<LngLat> noFlyCoordinates = new ArrayList<>();
+        for(double[] i:coordinates){
+            noFlyCoordinates.add(new LngLat(i[0],i[1]));
+
+        }
+        return noFlyCoordinates;
     }
 }
 

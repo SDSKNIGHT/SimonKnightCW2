@@ -32,6 +32,11 @@ public class Restaurant {
         return distance;
     }
 
+    /**
+     * This is a fuction that takes the address and uses it to get a list of all of the Restaurants on the rest server
+     * @param baseAddress
+     * @return
+     */
 
 
     static Restaurant[] getRestaurantsFromRestServer(String baseAddress){

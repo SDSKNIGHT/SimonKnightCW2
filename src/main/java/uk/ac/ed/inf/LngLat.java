@@ -72,8 +72,8 @@ public record LngLat(double lng, double lat){
             //DO A CONVERSION OF THE ENUM DIRECTIONS INTO VALUES
         } else {
 
-            double newLng = this.lng + Math.cos (angle.val) * 0.00015;
-            double newLat = this.lat + Math.sin (angle.val) * 0.00015;
+            double newLng = this.lng + Math.cos (angle.val*(Math.PI/180)) * 0.00015;
+            double newLat = this.lat + Math.sin (angle.val*(Math.PI/180)) * 0.00015;
 
             LngLat newPos = new LngLat (newLng, newLat);
             return newPos;

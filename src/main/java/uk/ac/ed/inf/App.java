@@ -28,30 +28,40 @@ public class App
         //move drone
 
 
-        /** making the fucking algo, also outputing delivries and also flightpath
+        /**
          *
          */
         for (int i=0;i<map.getOrderNumber();i++){
             Order currentOrder = map.getClosestOrder();
-            if (drone.getRemainingBattery()<=0){
-                System.out.println("out of battery");
-                break;
+            currentOrder.getDeliveryCost(client.getRestaurants());
+            currentOrder.orderTester();
+            if(currentOrder.orderOutcome == Order.OrderOutcome.ValidButNotDelivered ) {
+                if (drone.getRemainingBattery() <= 0) {
+                    System.out.println("out of battery");
+                    break;
+                }
+                ArrayList<FlightPath> path =drone.findPath(currentOrder);
+                if (drone.getRemainingBattery() >= 0) {
+                    currentOrder.orderOutcome = Order.OrderOutcome.Delivered;
+                    drone.addFlightPath(path);
+                }
             }
-            if (drone.home){
-                break;
-            }
-            drone.findPath(currentOrder);
-            if (drone.getRemainingBattery()<=-1){
+            drone.addOrder(currentOrder);
 
-            }
         }
         System.out.println("Battery remaining: " +drone.getRemainingBattery());
-        ArrayList<Order> deliveredOrders=drone.getOrderDelivered();
+
+        ArrayList<Order> deliveredOrders=drone.getOrdersDelivered();
         ArrayList<FlightPath> flightpath = drone.getFlightpaths();
+        for (FlightPath i:flightpath){
+            LngLat a =new LngLat (i.fromLongitude,i.fromLatitude);
+            LngLat b =new LngLat (i.toLongitude,i.toLatitude);
+            System.out.println(a.distanceTo(b));
+        }
 
         createGeojson(flightpath,date);
-        Output.createDeliveries(deliveredOrders);
-        Output.createFlightpath(flightpath);
+        Output.createDeliveries(deliveredOrders, date);
+        Output.createFlightpath(flightpath,date);
 
 
     }

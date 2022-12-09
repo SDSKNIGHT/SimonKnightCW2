@@ -44,7 +44,9 @@ public class MapModel {
 
 
     }
-
+    public NoFlyObject[] getNoFlyZones(){
+        return this.noFlyZones;
+    }
     public int getOrderNumber(){
         return this.orders.length;
     }

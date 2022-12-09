@@ -8,26 +8,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 public class Order {
     @JsonProperty("orderNo")
     public String  orderNo;
     @JsonProperty("orderDate")
-    public Date date;
+    public String date;
     @JsonProperty("customer")
     public String customerName;
     @JsonProperty("creditCardNumber")
-    public int cardNumber;
+    public String cardNumber;
     @JsonProperty("creditCardExpiry")
     public String expiryDate;
     @JsonProperty("cvv")
-    public int cvv;
+    public String cvv;
     @JsonProperty("priceTotalInPence")
     public int priceInPence;
     @JsonProperty("orderItems")
-    public String[] order;
+    public String[] orderItems;
     public Restaurant restaurantVal=null;
     public Double distance;
     public OrderOutcome orderOutcome;
@@ -38,7 +39,7 @@ public class Order {
      * @param order
      * @return
      */
-    public Restaurant returnRestaurant(Restaurant[] restaurants, String... order){
+    public Restaurant returnRestaurant(Restaurant[] restaurants, String[] order){
         if (restaurantVal == null) {
             Restaurant actual = null;
             for (Restaurant r : restaurants) {
@@ -67,6 +68,30 @@ public class Order {
         }
         return restaurantVal;
     }
+    public void orderTester() throws ParseException {
+        SimpleDateFormat cardDateFormat = new SimpleDateFormat("MM/yy");
+        SimpleDateFormat orderDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date cardDate = cardDateFormat.parse(this.expiryDate);
+        Date orderDate = orderDateFormat.parse(this.date);
+        if (this.orderOutcome==null) {
+            if (this.orderItems.length == 0) {
+                this.orderOutcome = OrderOutcome.InvalidPizzaCount;
+            } else if (this.getCreditCardNumber().length() != 16) {
+                this.orderOutcome = OrderOutcome.InvalidCardNumber;
+            } else if (this.cvv.length() != 3) {
+                this.orderOutcome = OrderOutcome.InvalidCvv;
+            } else if (cardDate.before(orderDate)) {
+                this.orderOutcome = OrderOutcome.InvalidExpiryDate;
+            }
+             else this.orderOutcome = OrderOutcome.ValidButNotDelivered;
+        }
+    }
+
+    private String getCreditCardNumber() {
+        return cardNumber;
+    }
+
+
     public String getOrderNo(){
         return this.orderNo;
     }
@@ -75,28 +100,33 @@ public class Order {
         return orderOutcome.toString();
     }
 
-    public int getDeliveryCost(Restaurant[] restaurants, String... order) throws Exception {
+    public int getDeliveryCost(Restaurant[] restaurants ) throws Exception {
         if (this.restaurantVal == null) {
-            Restaurant actual = returnRestaurant(restaurants, order);
+            Restaurant actual = returnRestaurant(restaurants, orderItems);
         }
 
         if(this.restaurantVal==null){
-            throw new Exception("No restaurant delivers the given selection");
+            this.orderOutcome = OrderOutcome.Invalid;
         }
         int priceInP = 100;
-        for(int i=0; i<this.restaurantVal.getMenu().length;i++) {
-            for (int j = 0; j < order.length; j++) {
-                if (this.restaurantVal.getMenu()[i].menuItem.equals(order[j])) {
-                    priceInP = priceInP + this.restaurantVal.getMenu()[i].menuItemPrice;
+        if(this.restaurantVal!= null) {
+            for (int i = 0; i < this.restaurantVal.getMenu().length; i++) {
+                for (int j = 0; j < orderItems.length; j++) {
+                    if (this.restaurantVal.getMenu()[i].menuItem.equals(orderItems[j])) {
+                        priceInP = priceInP + this.restaurantVal.getMenu()[i].menuItemPrice;
+                    }
                 }
             }
+        }
+        if (priceInP != priceInPence) {
+            this.orderOutcome = OrderOutcome.InvalidTotal;
         }
         return priceInP;
     }
     static Order[] getOrdersForDate(String baseAddress, String date){
         try{
 
-            URL orderURL = new URL (baseAddress+ "order/"+date);
+            URL orderURL = new URL (baseAddress+ "orders/"+date);
             Order[] orderArray = new ObjectMapper().readValue( orderURL, Order[].class);
             return orderArray;
         } catch (MalformedURLException e) {
@@ -113,9 +143,8 @@ public class Order {
     }
     public double orderDistance(Restaurant[] restaurants){
         if (this.restaurantVal == null){
-            if (this.restaurantVal == null) {
-                Restaurant actual = returnRestaurant(restaurants, order);
-            }
+            Restaurant actual = returnRestaurant(restaurants,orderItems);
+
         }
         if (this.restaurantVal!= null) {
 
@@ -124,8 +153,11 @@ public class Order {
 
             }
         }
+        if(this.distance==null){
+            this.distance = Double.MAX_VALUE;
+        }
         return distance;
-    }
+}
     /**
      * enums for delivery status.
      */
@@ -138,8 +170,14 @@ public class Order {
         InvalidTotal ,
         InvalidPizzaNotDefined ,// non real pizza included
         InvalidPizzaCount ,
-        InvalidPizzaCombinationMultipleSuppliers ,
+
         Invalid
+    }
+    public void setOrderOutcome(OrderOutcome outcome){
+        this.orderOutcome=outcome;
+    }
+    public int getPriceInPence(){
+        return priceInPence;
     }
 
 
